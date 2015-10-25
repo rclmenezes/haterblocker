@@ -2,6 +2,7 @@
 
 import os
 
+import nltk
 from flask import Flask
 from flask import g, session, request, url_for, flash
 from flask import redirect, render_template
@@ -11,6 +12,8 @@ from textblob import TextBlob
 app = Flask(__name__)
 app.debug = True
 app.secret_key = 'development'
+
+nltk.data.path.append('./nltk_data')
 
 oauth = OAuth(app)
 
