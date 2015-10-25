@@ -46,6 +46,7 @@ def tweet_avg_sentiment(tweet):
     blob = TextBlob(tweet['text'])
     return sum(s.sentiment.polarity for s in blob.sentences) / len(blob.sentences)
 
+
 @app.route('/')
 def index():
     error = False
@@ -62,17 +63,19 @@ def index():
     return render_template('index.html', error=error)
 
 
-# TODO: make version without login
-#
-# @app.route('/user/<username>')
-# def user_timeline(username):
-#     resp = twitter.request('statuses/user_timeline.json?screen_name={}'.format(username))
-#     if resp.status == 200:
-#         tweets = resp.data
+@app.route('/user/<username>')
+def user_timeline(username):
+    if g.user is None:
+        return redirect(url_for('index'))
 
-#         for t in tweets:
-#             t['avg_sentiment'] = tweet_avg_sentiment(t)
-#         return render_template('timeline.html', tweets=tweets)
+    resp = twitter.request('statuses/user_timeline.json?screen_name={}'.format(username))
+    if resp.status == 200:
+        tweets = resp.data
+
+        for t in tweets:
+            t['avg_sentiment'] = tweet_avg_sentiment(t)
+        return render_template('timeline.html', tweets=tweets)
+    return render_template('index.html', error=True)
 
 
 @app.route('/login')
