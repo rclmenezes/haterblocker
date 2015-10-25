@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="Twitter - now safe!">
+    <meta name="author" content="Rodrigo Menezes">
+
+    <title>Hater Blocker</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <script src="//platform.twitter.com/widgets.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  </head>
+
+  <style>
+    .tweet {
+      padding: 10px 0;
+    }
+
+    .tweet iframe {
+      margin: 10px auto !important;
+    }
+
+    .unsafe {
+      background: #F7ADAD;
+    }
+
+    .unsafe .tweet-content {
+      display: none;
+    }
+
+    .tweet-warning {
+      text-align: center;
+    }
+  </style>
+
+  <body>
+    <div class="container">
+      <a class='pull-right' href='/logout' style="padding-top: 25px;">Logout</a>
+
+      <h3 class="text-muted">Hater Blocker</h3>
+      
+      <div>
+        Hiding <span id="num-hidden"></span> of <span id="num-total"></span> tweets. <a id="hate-toggle" href="#">Show the hate</a>
+      </div>
+
+      <div class="row">
+        {% for tweet in tweets %}
+        <div class="tweet col-md-6 col-md-offset-3 {{ 'safe' if tweet['avg_sentiment'] >= 0 else 'unsafe' }}"> 
+          <div class="tweet-content">
+            <blockquote class="twitter-tweet" lang="en">
+              <a href="https://twitter.com/{{ tweet['user']['screen_name'] }}/status/{{ tweet['id'] }}">October 23, 2015</a>
+            </blockquote>
+          </div>
+          {% if tweet['avg_sentiment'] < 0 %}
+            <div class='tweet-warning'>
+              Tweet from @{{ tweet['user']['screen_name'] }} is blocked.
+              <a class="tweet-hate-toggle" href="#">Show tweet</a>
+            </div>
+          {% endif %}
+          <div></div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <footer class="footer">
+        <p class="pull-right"><a href="https://github.com/rclmenezes/haterblocker">Github</a></p>
+        <p>Made by <a href="https://github.com/rclmenezes/">Rodrigo Menezes</a></p>
+      </footer>
+    </div>
+
+    <script>
+      $(function(){
+        var isHateBlocked = true;
+        $('#num-hidden').text($('.unsafe').length);
+        $('#num-total').text($('.tweet').length);
+        $('#hate-toggle').click(function(){
+          isHateBlocked = !isHateBlocked;
+          if (isHateBlocked) {
+            $('.unsafe .tweet-content').hide();
+            $('.tweet-warning').show();
+            $('#hate-toggle').text('Show the hate');
+          } else {
+            $('.unsafe .tweet-content').show();
+            $('.tweet-warning').hide();
+            $('#hate-toggle').text('Hide the hate');
+          }
+        });
+
+        $('.tweet-hate-toggle').click(function(){
+          var $this = $(this);
+          $this.parents('.tweet').children('.tweet-content').show();
+          $this.parents('.tweet-warning').hide();
+        });
+      });
+    </script>
+  </body>
+</html>
