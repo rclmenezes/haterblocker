@@ -17,6 +17,10 @@
   </head>
 
   <style>
+    a {
+      cursor: pointer;
+    }
+
     .tweet {
       padding: 10px 0;
     }
@@ -45,7 +49,7 @@
       <h3 class="text-muted">Hater Blocker</h3>
       
       <div>
-        Hiding <span id="num-hidden"></span> of <span id="num-total"></span> tweets. <a id="hate-toggle" href="#">Show the hate</a>
+        Hiding <span id="num-hidden"></span> of <span id="num-total"></span> tweets. <a id="hate-toggle">Show the hate</a>
       </div>
 
       <div class="row">
@@ -59,7 +63,7 @@
           {% if tweet['avg_sentiment'] < 0 %}
             <div class='tweet-warning'>
               Tweet from @{{ tweet['user']['screen_name'] }} is blocked.
-              <a class="tweet-hate-toggle" href="#">Show tweet</a>
+              <a class="tweet-hate-toggle">Show tweet</a>
             </div>
           {% endif %}
           <div></div>
