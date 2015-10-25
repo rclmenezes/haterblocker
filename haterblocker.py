@@ -43,6 +43,7 @@ def before_request():
 
 
 def tweet_avg_sentiment(tweet):
+    # Very complex. Such sophistication. Much research. Wow.
     blob = TextBlob(tweet['text'])
     return sum(s.sentiment.polarity for s in blob.sentences) / len(blob.sentences)
 
