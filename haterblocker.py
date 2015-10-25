@@ -10,6 +10,7 @@ from flask_oauthlib.client import OAuth
 from textblob import TextBlob
 
 app = Flask(__name__)
+app.secret_key = os.environ['secret_key']
 
 nltk.data.path.append('./nltk_data')
 
